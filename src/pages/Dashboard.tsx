@@ -15,9 +15,6 @@ export const Dashboard = () => {
   
   // Check for newly unlocked badges when the component mounts
   useEffect(() => {
-    const unlockedBadgeIds = stats.badges
-      .filter(badge => badge.unlocked && badge.unlockedAt)
-      .map(badge => badge.id);
       
     // Get badges unlocked in the last 24 hours
     const now = new Date();

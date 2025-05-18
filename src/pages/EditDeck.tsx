@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useDecks } from '../context/DeckContext';
-import { useStats } from '../context/StatsContext';
 
 // Predefined colors for deck selection
 const DECK_COLORS = [
@@ -23,10 +22,10 @@ const EMOJI_OPTIONS = [
   '🌍', '🧪', '🔢', '🎓', '🎯', '⚙️', '🧩', '💻',
 ];
 
-export const CreateDeck = () => {
+export const EditDeck = () => {
+  const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
-  const { createDeck, updateDeck } = useDecks();
-  const { checkForBadges } = useStats();
+  const { currentDeck, setCurrentDeck, updateDeck } = useDecks();
   
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -35,12 +34,42 @@ export const CreateDeck = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [errors, setErrors] = useState<{[key: string]: string}>({});
-  const [createdDeckId, setCreatedDeckId] = useState<string | null>(null);
+  
+  // Set current deck
+  useEffect(() => {
+    if (!deckId) return;
+    setCurrentDeck(deckId);
+  }, [deckId, setCurrentDeck]);
+  
+  // Load deck data
+  useEffect(() => {
+    if (currentDeck) {
+      setName(currentDeck.name);
+      setDescription(currentDeck.description);
+      setColor(currentDeck.color || DECK_COLORS[0]);
+      setEmoji(currentDeck.emoji || EMOJI_OPTIONS[0]);
+      setTags(currentDeck.tags || []);
+    }
+  }, [currentDeck]);
+  
+  // If deck not found
+  if (!currentDeck) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Deck not found</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
+          The deck you're looking for doesn't exist or has been deleted.
+        </p>
+        <Link to="/decks" className="btn btn-primary">
+          Back to Decks
+        </Link>
+      </div>
+    );
+  }
   
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted");
     
     // Validate form
     const newErrors: {[key: string]: string} = {};
@@ -54,43 +83,21 @@ export const CreateDeck = () => {
     }
     
     if (Object.keys(newErrors).length > 0) {
-      console.log("Form validation errors:", newErrors);
       setErrors(newErrors);
       return;
     }
     
-    try {
-      console.log("Creating deck:", { name, description, color, emoji, tags });
-      
-      // Create new deck
-      const newDeck = createDeck(name.trim(), description.trim());
-      console.log("New deck created:", newDeck);
-      
-      // Update deck with additional properties
-      updateDeck(newDeck.id, {
-        color,
-        emoji,
-        tags
-      });
-      console.log("Deck updated with additional properties");
-      
-      // Store the created deck ID
-      setCreatedDeckId(newDeck.id);
-      
-      // Check for badges (like first deck created)
-      checkForBadges();
-      
-      // Use a longer timeout to ensure state updates are processed
-      setTimeout(() => {
-        console.log("Navigating to:", `/deck/${newDeck.id}`);
-        navigate(`/deck/${newDeck.id}`);
-      }, 500);
-    } catch (error) {
-      console.error("Error creating deck:", error);
-      setErrors({
-        general: "Failed to create deck. Please try again."
-      });
-    }
+    // Update the deck
+    updateDeck(deckId!, {
+      name: name.trim(),
+      description: description.trim(),
+      color,
+      emoji,
+      tags
+    });
+    
+    // Navigate back to the deck detail page
+    navigate(`/deck/${deckId}`);
   };
   
   // Handle adding tags
@@ -122,7 +129,7 @@ export const CreateDeck = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-          Create New Deck
+          Edit Deck
         </h1>
         
         <motion.div
@@ -132,28 +139,6 @@ export const CreateDeck = () => {
         >
           <div className="p-6">
             <form onSubmit={handleSubmit}>
-              {/* General error message */}
-              {errors.general && (
-                <div className="mb-6 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                  {errors.general}
-                </div>
-              )}
-              
-              {/* Success message */}
-              {createdDeckId && (
-                <div className="mb-6 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
-                  <p>Deck created successfully!</p>
-                  <p className="mt-1">
-                    <Link 
-                      to={`/deck/${createdDeckId}`}
-                      className="text-green-700 underline font-medium"
-                    >
-                      Click here to view your new deck
-                    </Link>
-                  </p>
-                </div>
-              )}
-              
               {/* Deck name */}
               <div className="mb-6">
                 <label 
@@ -325,13 +310,20 @@ export const CreateDeck = () => {
                 </div>
               </div>
               
-              {/* Submit button */}
-              <div className="flex justify-end">
+              {/* Submit buttons */}
+              <div className="flex justify-between">
+                <Link
+                  to={`/deck/${deckId}`}
+                  className="btn bg-white text-gray-800 border border-gray-300 hover:bg-gray-100 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
+                >
+                  Cancel
+                </Link>
+                
                 <button
                   type="submit"
                   className="btn btn-primary px-6 py-2"
                 >
-                  Create Deck
+                  Save Changes
                 </button>
               </div>
             </form>

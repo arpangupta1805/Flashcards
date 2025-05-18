@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { UserStats, StudySession, Badge, ReviewAction, Flashcard } from '../types';
+import type { UserStats, StudySession, Badge, ReviewAction } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { getSimpleDateString } from '../utils/dateUtils';
 
@@ -21,49 +21,56 @@ const defaultBadges: Badge[] = [
     name: 'First Step',
     description: 'Review your first flashcard',
     icon: '🎯',
-    unlocked: false
+    unlocked: false,
+    requirement: 1
   },
   {
     id: 'first-deck',
     name: 'Collector',
     description: 'Create your first deck',
     icon: '📚',
-    unlocked: false
+    unlocked: false,
+    requirement: 1
   },
   {
     id: 'study-streak-3',
     name: 'Consistent',
     description: 'Study 3 days in a row',
     icon: '🔥',
-    unlocked: false
+    unlocked: false,
+    requirement: 3
   },
   {
     id: 'study-streak-7',
     name: 'Dedicated',
     description: 'Study 7 days in a row',
     icon: '🔥🔥',
-    unlocked: false
+    unlocked: false,
+    requirement: 7
   },
   {
     id: 'study-streak-30',
     name: 'Unstoppable',
     description: 'Study 30 days in a row',
     icon: '🔥🔥🔥',
-    unlocked: false
+    unlocked: false,
+    requirement: 30
   },
   {
     id: 'cards-100',
     name: 'Scholar',
     description: 'Study 100 cards total',
     icon: '🧠',
-    unlocked: false
+    unlocked: false,
+    requirement: 100
   },
   {
     id: 'accuracy-80',
     name: 'Expert',
     description: 'Achieve 80% accuracy on 50+ cards',
     icon: '🏆',
-    unlocked: false
+    unlocked: false,
+    requirement: 50
   }
 ];
 

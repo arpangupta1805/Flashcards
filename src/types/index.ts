@@ -52,6 +52,8 @@ export interface Badge {
   icon: string;
   unlocked: boolean;
   unlockedAt?: Date;
+  progress?: number; // Progress towards unlocking (0-100)
+  requirement: number; // Number required to unlock
 }
 
 export type ReviewAction = 'know' | 'dontKnow';

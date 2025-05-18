@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fix FlashMaster Storage</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #4f46e5;
+    }
+    button {
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #4338ca;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .success {
+      color: #10b981;
+      font-weight: bold;
+    }
+    .error {
+      color: #ef4444;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>FlashMaster Storage Fix</h1>
+  <p>This page will create a sample deck in your browser's localStorage to fix the "no decks" issue.</p>
+  
+  <div id="output"></div>
+  
+  <button id="fixButton">Fix Storage</button>
+  <button id="clearButton">Clear Storage</button>
+  
+  <script>
+    const output = document.getElementById('output');
+    const fixButton = document.getElementById('fixButton');
+    const clearButton = document.getElementById('clearButton');
+    
+    function log(message, type = 'info') {
+      const pre = document.createElement('pre');
+      pre.textContent = message;
+      if (type === 'success') pre.className = 'success';
+      if (type === 'error') pre.className = 'error';
+      output.appendChild(pre);
+    }
+    
+    function createSampleDeck() {
+      const now = new Date();
+      
+      // Create sample cards
+      const sampleCards = [
+        {
+          id: crypto.randomUUID(),
+          question: "What is React?",
+          answer: "A JavaScript library for building user interfaces",
+          hint: "Created by Facebook",
+          level: 1,
+          nextReview: now.toISOString(),
+          tags: ["programming", "frontend"],
+          createdAt: now.toISOString()
+        },
+        {
+          id: crypto.randomUUID(),
+          question: "What is JSX?",
+          answer: "A syntax extension for JavaScript that looks similar to HTML",
+          hint: "Used in React components",
+          level: 1,
+          nextReview: now.toISOString(),
+          tags: ["programming", "react"],
+          createdAt: now.toISOString()
+        },
+        {
+          id: crypto.randomUUID(),
+          question: "What is a component in React?",
+          answer: "An independent, reusable piece of UI",
+          hint: "Can be functional or class-based",
+          level: 1,
+          nextReview: now.toISOString(),
+          tags: ["programming", "react"],
+          createdAt: now.toISOString()
+        },
+        {
+          id: crypto.randomUUID(),
+          question: "What is the capital of France?",
+          answer: "Paris",
+          options: ["London", "Berlin", "Paris", "Madrid"],
+          level: 1,
+          nextReview: now.toISOString(),
+          tags: ["geography"],
+          createdAt: now.toISOString()
+        }
+      ];
+      
+      // Create sample deck
+      const sampleDeck = {
+        id: crypto.randomUUID(),
+        name: "Sample Deck",
+        description: "A sample deck to get you started with FlashMaster",
+        cards: sampleCards,
+        createdAt: now.toISOString(),
+        updatedAt: now.toISOString(),
+        tags: ["sample", "demo"],
+        color: "#4f46e5" // Indigo color
+      };
+      
+      return sampleDeck;
+    }
+    
+    fixButton.addEventListener('click', () => {
+      try {
+        // Check if localStorage is available
+        if (typeof localStorage === 'undefined') {
+          log("localStorage is not available in this environment", 'error');
+          return;
+        }
+        
+        // Create and save a sample deck
+        const sampleDeck = createSampleDeck();
+        localStorage.setItem('flashcards-decks', JSON.stringify([sampleDeck]));
+        
+        log("✅ Sample deck created and saved successfully!", 'success');
+        log("You can now go back to your FlashMaster app and refresh the page.");
+        log("Your sample deck details:", 'info');
+        log(`Name: ${sampleDeck.name}`);
+        log(`Description: ${sampleDeck.description}`);
+        log(`Number of cards: ${sampleDeck.cards.length}`);
+      } catch (error) {
+        log(`❌ Error: ${error.message}`, 'error');
+      }
+    });
+    
+    clearButton.addEventListener('click', () => {
+      try {
+        localStorage.removeItem('flashcards-decks');
+        log("✅ Storage cleared successfully!", 'success');
+      } catch (error) {
+        log(`❌ Error: ${error.message}`, 'error');
+      }
+    });
+  </script>
+</body>
+</html> 

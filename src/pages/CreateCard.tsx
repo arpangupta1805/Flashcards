@@ -89,6 +89,8 @@ export const CreateCard = ({ isEditing = false }: CreateCardProps) => {
         answer: answer.trim(),
         hint: hint.trim() || undefined,
         tags,
+        level: 1,
+        nextReview: new Date()
       });
     }
     
@@ -169,6 +171,8 @@ export const CreateCard = ({ isEditing = false }: CreateCardProps) => {
         answer: card.answer,
         hint: card.hint || undefined,
         tags: [...tags, aiTopic],
+        level: 1,
+        nextReview: new Date()
       });
     });
     

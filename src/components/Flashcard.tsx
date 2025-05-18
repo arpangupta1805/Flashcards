@@ -1,6 +1,7 @@
 import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Flashcard as FlashcardType } from '../types';
+import '../styles/flashcard.css';
 
 interface FlashcardProps {
   card: FlashcardType;
@@ -101,7 +102,7 @@ export const Flashcard = forwardRef<{ handleFlip: () => void }, FlashcardProps>(
           setShowOptions(false);
           setSelectedOption(null);
           setIsCorrect(null);
-        }, 500);
+        }, 1000);
       }
     };
 
@@ -129,7 +130,7 @@ export const Flashcard = forwardRef<{ handleFlip: () => void }, FlashcardProps>(
         setShowOptions(false);
         setSelectedOption(null);
         setIsCorrect(null);
-      }, 500);
+      }, 1000);
     };
 
     const toggleHint = () => {
@@ -247,25 +248,12 @@ export const Flashcard = forwardRef<{ handleFlip: () => void }, FlashcardProps>(
           </div>
         )}
         
-        <div className="card-container perspective-1000">
-          <motion.div 
-            className={`card transform-style-3d relative ${isLocked ? 'opacity-75' : ''}`}
-            animate={{ rotateY: isFlipped ? 180 : 0 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-            style={{ 
-              transformStyle: 'preserve-3d',
-              minHeight: '250px'
-            }}
-          >
+        {/* Card container with 3D perspective */}
+        <div className="card-container">
+          <div className={`card ${isFlipped ? 'flipped' : ''} ${isLocked ? 'opacity-75' : ''}`}>
             {/* Front of card */}
-            <div 
-              className="absolute inset-0 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 flex flex-col"
-              style={{ 
-                backfaceVisibility: 'hidden',
-                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
-              }}
-            >
-              <div className="flex-1 flex items-center justify-center">
+            <div className="card-face card-front">
+              <div className="card-content">
                 <h2 className="text-2xl font-bold text-center">{card.question}</h2>
               </div>
               
@@ -336,18 +324,12 @@ export const Flashcard = forwardRef<{ handleFlip: () => void }, FlashcardProps>(
             </div>
             
             {/* Back of card */}
-            <div 
-              className="absolute inset-0 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 flex flex-col"
-              style={{ 
-                backfaceVisibility: 'hidden',
-                transform: 'rotateY(180deg)'
-              }}
-            >
-              <div className="flex-1 flex items-center justify-center">
+            <div className="card-face card-back">
+              <div className="card-content">
                 <p className="text-xl text-center">{card.answer}</p>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
         
         {/* Card controls */}

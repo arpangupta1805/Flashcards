@@ -105,15 +105,18 @@ export const DeckCard = ({ deck, dueCardCount }: DeckCardProps) => {
             </div>
             
             {dueCardCount > 0 && (
-              <Link 
-                to={`/deck/${deck.id}/study`}
-                onClick={(e) => e.stopPropagation()}
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  navigate(`/deck/${deck.id}/study`);
+                }}
                 className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 hover:bg-white/30 transition-colors"
               >
                 <span className="text-white font-medium">
                   {dueCardCount} due
                 </span>
-              </Link>
+              </button>
             )}
           </div>
         </div>

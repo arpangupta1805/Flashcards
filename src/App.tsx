@@ -4,13 +4,16 @@ import { DeckProvider } from './context/DeckContext';
 import { StatsProvider } from './context/StatsContext';
 import { Header } from './components/Header';
 import { Dashboard } from './pages/Dashboard';
+import { MyDecks } from './pages/MyDecks';
 import { DeckDetail } from './pages/DeckDetail';
 import { StudyDeck } from './pages/StudyDeck';
 import { CreateDeck } from './pages/CreateDeck';
+import { EditDeck } from './pages/EditDeck';
 import { CreateCard } from './pages/CreateCard';
+import { CreateCardWithOptions } from './pages/CreateCardWithOptions';
 import { Stats } from './pages/Stats';
-import { MyDecks } from './pages/MyDecks';
 import { StorageWarning } from './components/StorageWarning';
+import { DebugStorage } from './components/DebugStorage';
 import { useDecks } from './context/DeckContext';
 
 // Wrapper component to provide location key to routes
@@ -23,9 +26,12 @@ const AppRoutes = () => {
       <Route path="/decks" element={<MyDecks />} />
       <Route path="/decks/new" element={<CreateDeck />} />
       <Route path="/deck/:deckId" element={<DeckDetail />} />
+      <Route path="/deck/:deckId/edit" element={<EditDeck />} />
       <Route path="/deck/:deckId/study" element={<StudyDeck />} />
       <Route path="/deck/:deckId/card/new" element={<CreateCard />} />
+      <Route path="/deck/:deckId/card/new/options" element={<CreateCardWithOptions />} />
       <Route path="/deck/:deckId/card/:cardId/edit" element={<CreateCard isEditing />} />
+      <Route path="/deck/:deckId/card/:cardId/edit/options" element={<CreateCardWithOptions isEditing />} />
       <Route path="/stats" element={<Stats />} />
     </Routes>
   );
@@ -53,6 +59,9 @@ const AppContent = () => {
           isOpen={isStorageWarningOpen} 
           onClose={() => setIsStorageWarningOpen(false)} 
         />
+        
+        {/* Debug component */}
+        <DebugStorage />
       </div>
     </Router>
   );

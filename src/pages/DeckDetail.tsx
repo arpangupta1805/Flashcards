@@ -16,11 +16,18 @@ export const DeckDetail = () => {
   // Set current deck
   useEffect(() => {
     if (!deckId) return;
+    console.log("DeckDetail: Setting current deck with ID:", deckId);
     setCurrentDeck(deckId);
   }, [deckId, setCurrentDeck]);
   
+  // Debug current deck
+  useEffect(() => {
+    console.log("DeckDetail: Current deck:", currentDeck);
+  }, [currentDeck]);
+  
   // If deck not found
   if (!currentDeck) {
+    console.log("DeckDetail: Deck not found for ID:", deckId);
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Deck not found</h1>
@@ -144,12 +151,28 @@ export const DeckDetail = () => {
             {dueCards.length > 0 ? `Study Now (${dueCards.length} Due)` : 'Study All Cards'}
           </Link>
           
-          <Link
-            to={`/deck/${deckId}/card/new`}
-            className="btn bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-8 py-3 text-lg font-medium w-full sm:w-auto text-center"
-          >
-            Add Cards
-          </Link>
+          <div className="mb-6 flex justify-end space-x-2">
+            <Link
+              to={`/deck/${deckId}/card/new`}
+              className="btn btn-primary"
+            >
+              <svg className="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Add Card
+            </Link>
+            
+            <Link
+              to={`/deck/${deckId}/card/new/options`}
+              className="btn bg-purple-500 text-white hover:bg-purple-600"
+            >
+              <svg className="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 2v5a2 2 0 002 2h5" />
+              </svg>
+              Add Multiple Choice
+            </Link>
+          </div>
         </div>
       </div>
       
@@ -183,13 +206,6 @@ export const DeckDetail = () => {
                 />
               </svg>
             </div>
-            
-            <Link 
-              to={`/deck/${deckId}/card/new`}
-              className="btn btn-primary w-full sm:w-auto text-center"
-            >
-              Add Card
-            </Link>
           </div>
         </div>
         
