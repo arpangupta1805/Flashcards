@@ -5,6 +5,18 @@ import { useTheme } from '../context/ThemeContext';
 import { useStats } from '../context/StatsContext';
 import { useDecks } from '../context/DeckContext';
 
+// Logo SVG component
+const Logo = () => (
+  <svg width="32" height="32" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
+    <rect width="512" height="512" rx="100" fill="currentColor"/>
+    <rect x="96" y="136" width="320" height="240" rx="16" fill="white" transform="rotate(-8 96 136)"/>
+    <rect x="116" y="156" width="320" height="240" rx="16" fill="#f0f9ff" transform="rotate(-4 116 156)"/>
+    <rect x="136" y="176" width="320" height="240" rx="16" fill="white"/>
+    <path d="M256 160C230.4 160 208 178.4 208 204C208 212.8 210.4 220.8 214.4 228C201.6 236 192 250.4 192 268C192 285.6 201.6 300.8 214.4 308C210.4 315.2 208 323.2 208 332C208 357.6 230.4 376 256 376C281.6 376 304 357.6 304 332C304 323.2 301.6 315.2 297.6 308C310.4 300.8 320 285.6 320 268C320 250.4 310.4 236 297.6 228C301.6 220.8 304 212.8 304 204C304 178.4 281.6 160 256 160Z" fill="white"/>
+    <path d="M208 268L224 300L240 268L256 300L272 268L288 300L304 268" stroke="white" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 export const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const { stats } = useStats();
@@ -35,8 +47,10 @@ export const Header = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl mr-2">🧠</span>
-              <span className="font-bold text-xl text-gray-900 dark:text-white">FlashMaster</span>
+              <span className="text-primary-500 dark:text-primary-400">
+                <Logo />
+              </span>
+              <span className="font-bold text-xl text-gray-900 dark:text-white">MemoryMaster</span>
             </Link>
           </div>
 

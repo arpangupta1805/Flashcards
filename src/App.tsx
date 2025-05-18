@@ -3,6 +3,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { DeckProvider } from './context/DeckContext';
 import { StatsProvider } from './context/StatsContext';
 import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 import { Dashboard } from './pages/Dashboard';
 import { MyDecks } from './pages/MyDecks';
 import { DeckDetail } from './pages/DeckDetail';
@@ -43,16 +44,12 @@ const AppContent = () => {
   
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
-        <main>
+        <main className="flex-grow">
           <AppRoutes />
         </main>
-        <footer className="mt-12 py-6 border-t border-gray-200 dark:border-gray-800">
-          <div className="container mx-auto px-4 text-center text-gray-600 dark:text-gray-400 text-sm">
-            <p>FlashMaster - Built with React, Tailwind CSS, and Framer Motion</p>
-          </div>
-        </footer>
+        <Footer />
         
         {/* Storage warning popup */}
         <StorageWarning 
