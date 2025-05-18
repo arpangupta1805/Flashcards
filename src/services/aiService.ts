@@ -12,7 +12,7 @@ interface AIGeneratedCard {
 
 export async function generateFlashcards(params: AIGenerationParams): Promise<AIGeneratedCard[]> {
   try {
-    const { topic, subject, className, count, difficulty, format, language } = params;
+    const { topic, subject, className, count, difficulty, language } = params;
     
     // Build the enhanced prompt
     let prompt = `You are an expert study assistant who writes high-quality spaced-repetition flashcards.

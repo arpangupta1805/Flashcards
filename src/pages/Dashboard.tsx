@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useDecks } from '../context/DeckContext';
 import { useStats } from '../context/StatsContext';
 import { DeckCard } from '../components/DeckCard';

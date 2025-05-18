@@ -84,11 +84,14 @@ export const CreateCardWithOptions = ({ isEditing = false }: CreateCardWithOptio
     
     // Prepare card data
     const cardData = {
+      id: cardId,
       question: question.trim(),
       answer: answer.trim(),
       hint: hint.trim() || undefined,
       tags,
-      options: isMultipleChoice ? options : undefined
+      options: isMultipleChoice ? options : undefined,
+      level: 0,
+      nextReview: new Date()
     };
     
     if (isEditing && deckId && cardId) {

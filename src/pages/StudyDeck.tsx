@@ -6,13 +6,14 @@ import { useStats } from '../context/StatsContext';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { Flashcard } from '../components/Flashcard';
 import { StudyTimer } from '../components/StudyTimer';
+import { isValidUUID } from '../utils/validationUtils';
 
 export const StudyDeck = () => {
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const studyMode = searchParams.get('mode');
-  const { decks, currentDeck, setCurrentDeck, getDueCards, reviewCard } = useDecks();
+  const { currentDeck, setCurrentDeck, getDueCards, reviewCard } = useDecks();
   const { startStudySession, endStudySession, recordReview, incrementCardStudied } = useStats();
   
   const [dueCards, setDueCards] = useState<any[]>([]);
@@ -31,6 +32,13 @@ export const StudyDeck = () => {
   // Set current deck and get due cards
   useEffect(() => {
     if (!deckId) return;
+    
+    // Check if this is a valid UUID format
+    if (!isValidUUID(deckId)) {
+      console.error("StudyDeck: Invalid deck ID format:", deckId);
+      navigate('/decks'); // Redirect to decks list
+      return;
+    }
     
     setCurrentDeck(deckId);
     
@@ -68,7 +76,7 @@ export const StudyDeck = () => {
         );
       }
     };
-  }, [deckId, setCurrentDeck, getDueCards, startStudySession, currentDeck, studyMode]);
+  }, [deckId, setCurrentDeck, getDueCards, startStudySession, currentDeck, studyMode, navigate]);
   
   // Reference for the flashcard component
   const flashcardRef = useRef<{ handleFlip: () => void } | null>(null);
@@ -155,11 +163,11 @@ export const StudyDeck = () => {
   };
   
   // Flip card with space key - now handled by the flashcard component
-  const handleFlipCard = () => {
-    if (flashcardRef.current) {
-      flashcardRef.current.handleFlip();
-    }
-  };
+  // const handleFlipCard = () => {
+  //   if (flashcardRef.current) {
+  //     flashcardRef.current.handleFlip();
+  //   }
+  // };
   
   // Calculate progress
   const progress = dueCards.length > 0 

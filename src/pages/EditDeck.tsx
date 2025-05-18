@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useDecks } from '../context/DeckContext';
+import { isValidUUID } from '../utils/validationUtils';
 
 // Predefined colors for deck selection
 const DECK_COLORS = [
@@ -38,8 +39,16 @@ export const EditDeck = () => {
   // Set current deck
   useEffect(() => {
     if (!deckId) return;
+    
+    // Check if this is a valid UUID format
+    if (!isValidUUID(deckId)) {
+      console.error("EditDeck: Invalid deck ID format:", deckId);
+      navigate('/decks'); // Redirect to decks list
+      return;
+    }
+    
     setCurrentDeck(deckId);
-  }, [deckId, setCurrentDeck]);
+  }, [deckId, setCurrentDeck, navigate]);
   
   // Load deck data
   useEffect(() => {

@@ -23,7 +23,6 @@ export const Stats = () => {
   const [dailyReviewData, setDailyReviewData] = useState<any[]>([]);
   const [levelDistributionData, setLevelDistributionData] = useState<any[]>([]);
   const [progressData, setProgressData] = useState<any[]>([]);
-  const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
   
   // Reset loading state when navigating to this page
   useEffect(() => {
@@ -43,10 +42,7 @@ export const Stats = () => {
     localStorage.setItem('flashcards-daily-correct', dailyCorrectCards.toString());
   }, [dailyCorrectCards]);
   
-  // Function to increment daily correct cards
-  const incrementDailyCorrectCards = () => {
-    setDailyCorrectCards(prev => prev + 1);
-  };
+  
   
   useEffect(() => {
     // Simulate loading delay
@@ -155,15 +151,7 @@ export const Stats = () => {
   // Chart colors
   const COLORS = ['#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
   
-  // Handle badge hover
-  const handleBadgeHover = (badgeId: string | null) => {
-    setSelectedBadge(badgeId);
-  };
   
-  // Skeleton loading component
-  const Skeleton = ({ height = "h-6", width = "w-full" }) => (
-    <div className={`${height} ${width} bg-gray-200 dark:bg-gray-700 rounded animate-pulse`}></div>
-  );
   
   if (isLoading) {
     return (
@@ -321,11 +309,12 @@ export const Stats = () => {
                   label={({ name, value, percent }) => 
                     value > 0 ? `${name}: ${value} (${(percent * 100).toFixed(0)}%)` : ''
                   }
-                  labelStyle={{ fill: '#333', fontSize: '12px', fontWeight: 'bold' }}
+                  // labelStyle={{ fill: '#333', fontSize: '12px', fontWeight: 'bold' }}
                 >
                   {levelDistributionData.map((entry, index) => (
                     <Cell 
-                      key={`cell-${index}`} 
+                      key={`cell-${index}`}
+                      data-Key={entry}
                       fill={COLORS[index % COLORS.length]} 
                       stroke="#fff"
                       strokeWidth={1}

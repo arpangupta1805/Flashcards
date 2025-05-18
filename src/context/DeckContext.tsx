@@ -127,6 +127,44 @@ export const DeckProvider = ({ children }: { children: ReactNode }) => {
 
   const setCurrentDeck = (deckId: string) => {
     console.log("DeckContext: Setting current deck", { deckId, availableDecks: decks.map(d => ({ id: d.id, name: d.name })) });
+    
+    // Check if decks array is empty
+    if (decks.length === 0) {
+      console.log("DeckContext: No decks available in state");
+      // Try to reload from localStorage directly
+      try {
+        const savedDecks = localStorage.getItem('flashcards-decks');
+        if (savedDecks) {
+          const parsed = JSON.parse(savedDecks);
+          console.log("DeckContext: Found saved decks in localStorage", parsed);
+          
+          // Convert date strings back to Date objects
+          const convertedDecks = parsed.map((deck: any) => ({
+            ...deck,
+            createdAt: new Date(deck.createdAt),
+            updatedAt: new Date(deck.updatedAt),
+            cards: deck.cards.map((card: any) => ({
+              ...card,
+              nextReview: new Date(card.nextReview),
+              lastReviewed: card.lastReviewed ? new Date(card.lastReviewed) : undefined,
+              createdAt: card.createdAt ? new Date(card.createdAt) : undefined
+            }))
+          }));
+          
+          // Update decks state
+          setDecks(convertedDecks);
+          
+          // Find the requested deck in the loaded decks
+          const deck = convertedDecks.find((d: Deck) => d.id === deckId) || null;
+          console.log("DeckContext: Found deck in localStorage?", deck ? "Yes" : "No");
+          setCurrentDeckState(deck);
+          return;
+        }
+      } catch (error) {
+        console.error("DeckContext: Error reloading decks from localStorage", error);
+      }
+    }
+    
     const deck = decks.find(d => d.id === deckId) || null;
     console.log("DeckContext: Found deck?", deck ? "Yes" : "No");
     setCurrentDeckState(deck);
@@ -386,6 +424,9 @@ export const DeckProvider = ({ children }: { children: ReactNode }) => {
     });
     
     setDecks(updatedDecks);
+    
+    // Save to localStorage immediately
+    saveDecksToStorage(updatedDecks);
     
     // Update current deck if it's the one being modified
     if (currentDeck && currentDeck.id === deckId) {

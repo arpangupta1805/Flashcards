@@ -3,11 +3,12 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useDecks } from '../context/DeckContext';
 import { formatDate, formatRelativeTime } from '../utils/dateUtils';
+import { isValidUUID } from '../utils/validationUtils';
 
 export const DeckDetail = () => {
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
-  const { decks, currentDeck, setCurrentDeck, getDueCards, deleteDeck } = useDecks();
+  const { currentDeck, setCurrentDeck, getDueCards, deleteDeck } = useDecks();
   
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,8 +18,16 @@ export const DeckDetail = () => {
   useEffect(() => {
     if (!deckId) return;
     console.log("DeckDetail: Setting current deck with ID:", deckId);
+    
+    // Check if this is a valid UUID format
+    if (!isValidUUID(deckId)) {
+      console.error("DeckDetail: Invalid deck ID format:", deckId);
+      navigate('/decks'); // Redirect to decks list
+      return;
+    }
+    
     setCurrentDeck(deckId);
-  }, [deckId, setCurrentDeck]);
+  }, [deckId, setCurrentDeck, navigate]);
   
   // Debug current deck
   useEffect(() => {

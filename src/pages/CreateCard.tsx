@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useDecks } from '../context/DeckContext';
 import { generateFlashcards } from '../services/aiService';
 import type { AIGenerationParams } from '../types';
+import { isValidUUID } from '../utils/validationUtils';
 
 interface CreateCardProps {
   isEditing?: boolean;
@@ -34,8 +35,16 @@ export const CreateCard = ({ isEditing = false }: CreateCardProps) => {
   // Set current deck
   useEffect(() => {
     if (!deckId) return;
+    
+    // Check if this is a valid UUID format
+    if (!isValidUUID(deckId)) {
+      console.error("CreateCard: Invalid deck ID format:", deckId);
+      navigate('/decks'); // Redirect to decks list
+      return;
+    }
+    
     setCurrentDeck(deckId);
-  }, [deckId, setCurrentDeck]);
+  }, [deckId, setCurrentDeck, navigate]);
   
   // Load card data if editing
   useEffect(() => {
