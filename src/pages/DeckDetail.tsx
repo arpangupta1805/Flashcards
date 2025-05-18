@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useDecks } from '../context/DeckContext';
-import { formatDate, formatRelativeTime } from '../utils/dateUtils';
+import { formatRelativeTime } from '../utils/dateUtils';
 import { isValidUUID } from '../utils/validationUtils';
 
 export const DeckDetail = () => {
